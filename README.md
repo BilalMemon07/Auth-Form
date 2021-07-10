@@ -1,1 +1,1 @@
-BilalMemon07.github.io/Auth-Form
+BilalMemon07.github.io/Auth-Form/login.html
