@@ -1,28 +1,27 @@
-let onSingup = () => {
-    // get input values
+// get input values
+const onSingup = () => {
     let fullName = document.getElementById('fullName');
     let email = document.getElementById('email');
     let password = document.getElementById('password');
     let phoneNumber = document.getElementById('phoneNumber');
     let address = document.getElementById('address');
     let message = document.getElementById('message');
-
+    let user = {
+        fullName: fullName.value,
+        email: email.value,
+        password: password.value,
+        phoneNumber: phoneNumber.value,
+        address: address.value,
+    };
 
     if (fullName.value !== '' && email.value !== '' && password.value !== '' && phoneNumber.value !== '' && address.value !== '') {
+        let { fullName, email, password, phoneNumber, address } = user
 
-
-        let user = {
-            fullName: fullName.value,
-            email: email.value,
-            password: password.value,
-            phoneNumber: phoneNumber.value,
-            address: address.value,
-        };
 
         let users = JSON.parse(localStorage.getItem('users')) || [];
 
         let userIdx = users.findIndex(function (val) {
-            return val.email.toLowerCase() === user.email.toLowerCase()
+            return val.email.toLowerCase() === email.toLowerCase()
         });
 
 
@@ -33,12 +32,13 @@ let onSingup = () => {
             localStorage.setItem("users", JSON.stringify(users));
             // redirect to login page
             location.href = 'login.html';
-            fullName.value = ""
-            email.value = ""
-            phoneNumber.value = ""
-            address.value = ""
+            fullName.value = "";
+            email.value = "";
+            phoneNumber.value = "";
+            address.value = "";
+            password.value = "";
         } else {
-            message.innerHTML = user.email.split("@")[0] + " use in another account";
+            message.innerHTML = email.split("@")[0] + " use in another account";
             this.message.classList.remove("btn-primary")
             this.message.classList.add("btn-danger")
         }
@@ -61,22 +61,22 @@ let onSingup = () => {
 // login section
 
 
-let onLogin = () => {
+const onLogin = () => {
 
     let email = document.getElementById('email');
     let password = document.getElementById('password');
     let message = document.getElementById('message');
+    let user = {
+        email: email.value,
+        password: password.value,
+    };
     if (email.value !== '' && password.value !== '') {
-        let user = {
-            email: email.value,
-            password: password.value,
-        };
-
+        let { email, password } = user
 
         var users = JSON.parse(localStorage.getItem("users")) || [];
 
         var currentUser = users.find(function (val) {
-            return val.email.toLowerCase() === user.email.toLowerCase() && val.password === user.password;
+            return val.email.toLowerCase() === email.toLowerCase() && val.password === password;
         });
         if (currentUser) {
             localStorage.setItem("user", JSON.stringify(currentUser));
@@ -103,28 +103,35 @@ let onLogin = () => {
 
 // show user Current Data 
 
-function getCurrentUser() {
+const getCurrentUser = () => {
 
 
-    var userName = document.getElementById("userName");
-    var userMail = document.getElementById("userMail");
-    var userPhoneNo = document.getElementById("userPhoneNo");
-    var userAddress = document.getElementById("userAddress");
-    var userNameHead = document.getElementById("userName2");
-    var user = JSON.parse(localStorage.getItem("user"));
+    let userName = document.getElementById("userName");
+    let userMail = document.getElementById("userMail");
+    let userPhoneNo = document.getElementById("userPhoneNo");
+    let userAddress = document.getElementById("userAddress");
+    let userNameHead = document.getElementById("userName2");
+    let user = JSON.parse(localStorage.getItem("user"));
+    // var checkName = user.fullName[0]
+    let { fullName, email, phoneNumber, address } = user;
 
     // Show User Data on Document 
-    userNameHead.innerHTML = `Welcome   ${user.fullName.split("")[0].toUpperCase()}`;
-    userName.innerHTML = `${user.fullName} <i class="fas fa-edit" onclick='onEdit("fullName")'></i>`;
-    userMail.innerHTML = `Email:   ${user.email}`;
-    userPhoneNo.innerHTML = `Phone No:   ${user.phoneNumber}  <i class="fas fa-edit" onclick='onEdit("phoneNumber")'></i>`;
-    userAddress.innerHTML = `Address:   ${user.address}    <i class="fas fa-edit" onclick='onEdit("address")'></i>`;
+    // if (fullName == 1) {
+    userNameHead.innerHTML = `Welcome   ${fullName.toUpperCase()}`;
+    // } else {
+    //     userNameHead.innerHTML = `Welcome   ${fullName.split(" ")[0].toUpperCase()}`;
+    // }
+
+    userName.innerHTML = `${fullName} <i class="fas fa-edit" onclick='onEdit("fullName")'></i>`;
+    userMail.innerHTML = `Email:   ${email}`;
+    userPhoneNo.innerHTML = `Phone No:   ${phoneNumber}  <i class="fas fa-edit" onclick='onEdit("phoneNumber")'></i>`;
+    userAddress.innerHTML = `Address:   ${address}    <i class="fas fa-edit" onclick='onEdit("address")'></i>`;
 
 }
 
 // post Item 
 
-function onPost() {
+const onPost = () => {
 
     let title = document.getElementById('title');
     let discrip = document.getElementById('discrip');
@@ -217,17 +224,20 @@ let deleteItem = (e) => {
 // Edit User Data  
 
 let onEdit = (e) => {
-    var user = JSON.parse(localStorage.getItem("user"));
     let users = JSON.parse(localStorage.getItem('users'));
+    let user = JSON.parse(localStorage.getItem("user"));
     var edit = prompt("Enter updated value",)
+
+
     for (var i = 0; i < users.length; i++) {
-        if (user[e] === users[i][e]) {
+        if (user[e] == users[i][e]) {
             user[e] = edit;
-            users[i][e] = edit;
+            users[i][e] = user[e];
+            // users[i][e] = edit;
             localStorage.setItem("users", JSON.stringify(users));
             localStorage.setItem("user", JSON.stringify(user));
+            break;
         }
-        break;
     }
     location.href = "index.html"
 }
