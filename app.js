@@ -116,11 +116,11 @@ const getCurrentUser = () => {
     let { fullName, email, phoneNumber, address } = user;
 
     // Show User Data on Document 
-    // if (fullName == 1) {
-    userNameHead.innerHTML = `Welcome   ${fullName.toUpperCase()}`;
-    // } else {
-    //     userNameHead.innerHTML = `Welcome   ${fullName.split(" ")[0].toUpperCase()}`;
-    // }
+    if (fullName == 0) {
+        userNameHead.innerHTML = `Welcome   ${fullName.toUpperCase()}`;
+    } else {
+        userNameHead.innerHTML = `Welcome   ${fullName.split(" ")[1].toUpperCase()}`;
+    }
 
     userName.innerHTML = `${fullName} <i class="fas fa-edit" onclick='onEdit("fullName")'></i>`;
     userMail.innerHTML = `Email:   ${email}`;
